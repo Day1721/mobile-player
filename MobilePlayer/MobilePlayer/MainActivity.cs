@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.OS;
+using MobilePlayer.Models;
 
 namespace MobilePlayer
 {
@@ -9,9 +10,9 @@ namespace MobilePlayer
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
+            
             // Set our view from the "main" layout resource
-            // SetContentView (Resource.Layout.Main);
+            SetContentView (Resource.Layout.Main);
         }
     }
 }
