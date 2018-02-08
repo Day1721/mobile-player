@@ -2,6 +2,7 @@
 using Android.App;
 using Android.Runtime;
 using MobilePlayer.Models;
+using MobilePlayer.Models.Music;
 using MobilePlayer.Services;
 using TinyIoC;
 
@@ -31,7 +32,7 @@ namespace MobilePlayer
         {
             Container = TinyIoCContainer.Current;
 
-            Container.Register<IMusicService, MusicService>();
+            Container.Register<MusicServiceAbstract, MusicService>();
             Container.Register<IMusicScanner, MusicScanner>();
             Container.Register<IMusicParser, MusicParser>();
         }

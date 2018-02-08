@@ -1,37 +1,99 @@
-﻿using Android.App;
+﻿using System;
+using Android.App;
+using Android.Bluetooth;
 using Android.Content;
 using Android.Media;
 using Android.OS;
+using Java.IO;
 
 namespace MobilePlayer.Services
 {
-    public class MusicService : Service, IMusicService
+    [Service(Label = "Music Player")]
+    public class MusicService : MusicServiceAbstract
     {
-        private MediaPlayer _player;
-
-        public bool IsPlaying => _player.IsPlaying;
-        public int CurrentPosition => _player.CurrentPosition;
+        private const int NotificationId = 6325;
         
-        public override IBinder OnBind(Intent intent)
+        
+        private MediaPlayer _player;
+        private IBinder _musicBinder;
+
+        private File _whatPlays;
+        public override File WhatPlays => _whatPlays;
+        private void SetWhatPlays(File file)
         {
-            _player = new MediaPlayer();
-            return null;
+            _whatPlays = new File(file.ToURI());
+        }
+        
+        public override bool IsPlaying => _player.IsPlaying;
+        public int CurrentPosition => _player.CurrentPosition;
+
+        public override void OnCreate()
+        {
+            base.OnCreate();
+
+            _player = new MediaPlayer {Looping = true};
+            _player.SetOnPreparedListener(this);
+            _musicBinder = new Binder(this);
         }
 
-        public void Play(string path)
+        public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId) => StartCommandResult.Sticky;
+
+        public override IBinder OnBind(Intent intent) => _musicBinder;
+
+        public override void Play(File path)
         {
-            _player.SetDataSource(path);
-            _player.Start();
+            _player.Reset();
+            SetWhatPlays(path);
+            _player.SetDataSource(path.AbsolutePath);
+            _player.PrepareAsync();
         }
 
-        public void Play()
+        public override void Play() => _player.Start();
+
+        public override void Pause() => _player.Pause();
+        
+        public override void OnPrepared(MediaPlayer mp)
         {
-            _player.Start();
+            var notificationIntent = new Intent(this, typeof(MainActivity));
+            var pendingIntent = PendingIntent.GetActivity(this, 0, notificationIntent, 0);
+            var notification = new Notification.Builder(this)
+                .SetContentTitle(GetText(Resource.String.MusicService_NotificationTitle))
+                .SetContentIntent(pendingIntent)
+                .Build();
+            
+            StartForeground(NotificationId, notification);
+            mp.Start();
         }
 
-        public void Pause()
+
+        public class Binder : Android.OS.Binder 
         {
-            _player.Pause();
+            public MusicService Service { get; }
+            
+            public Binder(MusicService context)
+            {
+                Service = context;
+            }
+        }
+
+        public class Connection : Java.Lang.Object, IServiceConnection
+        {
+            public delegate void ServiceDisconnectedHandler(ComponentName name);
+            public event ServiceDisconnectedHandler ServiceDisconnected;
+            
+            public delegate void ServiceConnectedHandler(ComponentName name, IBinder binder);
+            public event ServiceConnectedHandler ServiceConnected;
+            
+            
+            public void OnServiceConnected(ComponentName name, IBinder service)
+            {
+                ServiceConnected?.Invoke(name, service);
+            }
+
+            public void OnServiceDisconnected(ComponentName name)
+            {
+                ServiceDisconnected?.Invoke(name);
+            }
         }
     }
 }
