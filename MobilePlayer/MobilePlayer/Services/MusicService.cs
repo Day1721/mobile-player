@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Android.App;
-using Android.Bluetooth;
 using Android.Content;
 using Android.Media;
 using Android.OS;
-using Java.IO;
+using MobilePlayer.Models.Extentions;
+using MobilePlayer.Models.Music;
 
 namespace MobilePlayer.Services
 {
@@ -12,20 +14,33 @@ namespace MobilePlayer.Services
     public class MusicService : MusicServiceAbstract
     {
         private const int NotificationId = 6325;
+        private Notification.Action.Builder _pausePlayActionBuilder;
+        private Notification.Builder _notificationBuilder;
         
         
         private MediaPlayer _player;
         private IBinder _musicBinder;
 
-        private File _whatPlays;
-        public override File WhatPlays => _whatPlays;
-        private void SetWhatPlays(File file)
+        private IList<Song> _playlist;
+        public override IList<Song> Playlist => _playlist;
+        private void SetPlaylist(ICollection<Song> playlist)
         {
-            _whatPlays = new File(file.ToURI());
+            _playlist = new List<Song>(playlist);
+            _current = 0;
+        }
+
+        private int _current;
+        public override int Current => _current;
+        private void SetCurrent(int current)
+        {
+            if (current < 0 || current >= _playlist.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(current));
+            }
+            _current = current;
         }
         
         public override bool IsPlaying => _player.IsPlaying;
-        public int CurrentPosition => _player.CurrentPosition;
 
         public override void OnCreate()
         {
@@ -34,33 +49,53 @@ namespace MobilePlayer.Services
             _player = new MediaPlayer {Looping = true};
             _player.SetOnPreparedListener(this);
             _musicBinder = new Binder(this);
+            _notificationBuilder = new Notification.Builder(this);
         }
 
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId) => StartCommandResult.Sticky;
 
         public override IBinder OnBind(Intent intent) => _musicBinder;
 
-        public override void Play(File path)
+        public override async Task PlayList(IList<Song> playlist, int index = 0)
         {
             _player.Reset();
-            SetWhatPlays(path);
-            _player.SetDataSource(path.AbsolutePath);
+            SetPlaylist(playlist);
+            SetCurrent(index);
+            await _player.SetDataSourceAsync(_playlist[index].Path.AbsolutePath);
             _player.PrepareAsync();
         }
 
-        public override void Play() => _player.Start();
+        public override async Task Play(int index)
+        {
+            _player.Reset();
+            SetCurrent(index);
+            await _player.SetDataSourceAsync(_playlist[index].Path.AbsolutePath);
+            _player.PrepareAsync();
+        }
+
+        public override void Play()
+        {
+            _player.Start();
+        }
 
         public override void Pause() => _player.Pause();
-        
+
+        public override async Task Next() => await Play((_current + 1).Mod(_playlist.Count));
+
+        public override async Task Previous() => await Play((_current - 1).Mod(_playlist.Count));
+
+            
         public override void OnPrepared(MediaPlayer mp)
         {
             var notificationIntent = new Intent(this, typeof(MainActivity));
             var pendingIntent = PendingIntent.GetActivity(this, 0, notificationIntent, 0);
-            var notification = new Notification.Builder(this)
-                .SetContentTitle(GetText(Resource.String.MusicService_NotificationTitle))
-                .SetContentIntent(pendingIntent)
-                .Build();
-            
+
+            _notificationBuilder.SetContentTitle(GetText(Resource.String.MusicService_NotificationTitle))
+                .SetContentText(Playlist[Current].ToString())
+                .SetContentIntent(pendingIntent);
+
+            var notification = _notificationBuilder.Build();
+                        
             StartForeground(NotificationId, notification);
             mp.Start();
         }

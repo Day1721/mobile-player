@@ -1,14 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://schemas.android.com/apk/res/android ">
-    <TextView android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="Hello World" />
-    <ListView android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:id="@+id/SongList"/>
-</LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+        <ListView android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:id="@+id/SongList"/>
+        <TextView
+                android:id="@+id/EmptySongList"
+                android:text="No songs found"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center" />
+    </LinearLayout>
+    <ImageButton android:scaleType="fitXY"
+                 android:layout_width="60dp"
+                 android:layout_height="60dp"
+                 android:src="@drawable/Pause128"
+                 android:id="@+id/PlayPauseBtn" 
+                 android:layout_alignParentBottom="true"
+                 android:layout_centerInParent="true"/>
+    <ImageButton android:id="@+id/Previous"
+                 android:scaleType="fitXY"
+                 android:layout_width="60dp"
+                 android:layout_height="60dp"
+                 android:src="@drawable/back"
+                 android:layout_alignParentLeft="true"
+                 android:layout_alignParentBottom="true"/>
+    <ImageButton android:id="@+id/Next"
+                 android:scaleType="fitXY"
+                 android:layout_width="60dp"
+                 android:layout_height="60dp"
+                 android:src="@drawable/next"
+                 android:layout_alignParentRight="true"
+                 android:layout_alignParentBottom="true"/>
+</RelativeLayout>

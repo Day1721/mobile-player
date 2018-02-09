@@ -56,13 +56,15 @@
     <Compile Include="App.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Models\Extentions\LinqExtentions.cs" />
+    <Compile Include="Models\Extentions\MathExtentions.cs" />
+    <Compile Include="Models\ICloneable.cs" />
     <Compile Include="Models\Music\IMusicParser.cs" />
     <Compile Include="Models\Music\IMusicScanner.cs" />
     <Compile Include="Models\Music\MusicParser.cs" />
     <Compile Include="Models\Music\MusicScanner.cs" />
     <Compile Include="Models\Music\Song.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Services\MusicServiceAbstract.cs" />
     <Compile Include="Services\MusicService.cs" />
     <Compile Include="TinyIoC.cs" />
@@ -86,7 +88,11 @@
     <Folder Include="Activities" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\drawable\player.png" />
+    <AndroidResource Include="Resources\drawable\Pause128.png" />
+    <AndroidResource Include="Resources\drawable\Play128.png" />
+    <AndroidResource Include="Resources\drawable\Player.png" />
+    <AndroidResource Include="Resources\drawable\back.png" />
+    <AndroidResource Include="Resources\drawable\next.png" />
     <Content Include="Resources\layout\SongRow.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Android.Media;
 using Android.OS;
 using Android.Widget;
 using MobilePlayer.Models.Music;
@@ -16,16 +18,22 @@ namespace MobilePlayer
     {
         private readonly IMusicScanner _scanner;
         private readonly IMusicParser _parser;
+        private readonly Type _musicServiceType;
         private MusicServiceAbstract _musicService;
+
+        private ImageButton _playPauseButton;
         
         public MainActivity()
         {
             _scanner = App.Container.Resolve<IMusicScanner>();
             _parser = App.Container.Resolve<IMusicParser>();
-            _musicService = App.Container.Resolve<MusicServiceAbstract>();
+            _musicServiceType = App.Container.Resolve<MusicServiceAbstract>().GetType();
         }
 
         private List<Song> _songs;
+        
+        
+        
         
         protected override void OnCreate(Bundle bundle)
         {
@@ -34,42 +42,79 @@ namespace MobilePlayer
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
 
-            var songDirs = _scanner.Scan(Environment.ExternalStorageDirectory);
-            _songs = songDirs.Select(_parser.Parse).ToList();
+            LoadSongs();
 
+            
             var listView = FindViewById<ListView>(Resource.Id.SongList);
             listView.Adapter = new ArrayAdapter<Song>(this, Android.Resource.Layout.SimpleListItem1, _songs);
+            listView.EmptyView = FindViewById(Resource.Id.EmptySongList);
+            
             
             listView.ItemClick += ListViewOnItemClick;
+            
+            _playPauseButton = FindViewById<ImageButton>(Resource.Id.PlayPauseBtn);
+            
+            _playPauseButton.Click += PlayPauseOnClick;
+            FindViewById<ImageButton>(Resource.Id.Previous).Click += PreviousOnClick;
+            FindViewById<ImageButton>(Resource.Id.Next).Click += NextOnClick;
+
+            InitMusicService();
+        }
+
+        private void LoadSongs() => _songs = _scanner
+            .Scan(Environment.ExternalStorageDirectory)
+            .Select(_parser.Parse)
+            .ToList();
+        
+        private void InitMusicService()
+        {
             StartService(MusicServiceIntent);
-            
             var serviceConnection = new MusicService.Connection();
-            
             serviceConnection.ServiceConnected += (name, binder) =>
             {
                 _musicService = ((MusicService.Binder) binder).Service;
             };
-            
             BindService(MusicServiceIntent, serviceConnection, Bind.AutoCreate);
         }
 
-        private async void ListViewOnItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        
+
+        private async void ListViewOnItemClick(object sender, AdapterView.ItemClickEventArgs e) 
+            => await PlayList(_songs, e.Position);
+
+        private void PlayPauseOnClick(object sender, EventArgs e)
         {
-            if (!_musicService.IsPlaying)
+            if (_musicService.IsPlaying)
             {
-                _musicService.Play(_songs[e.Position].Path);
-            }
-            else if (_songs[e.Position].Path.CompareTo(_musicService.WhatPlays) == 0)
-            {
-                _musicService.Pause();
+                Pause();
             }
             else
             {
-                _musicService.Play();
+                Play();
             }
         }
+
+        private async void NextOnClick(object sender, EventArgs e) => await _musicService.Next();
+        private async void PreviousOnClick(object sender, EventArgs e) => await _musicService.Previous();
+
+        private void Pause()
+        {
+            _musicService.Pause();
+            _playPauseButton.SetImageResource(Resource.Drawable.Play128);
+        }
+
+        private void Play()
+        {
+            _musicService.Play();
+            _playPauseButton.SetImageResource(Resource.Drawable.Pause128);
+        }
+
+        private async Task PlayList(IList<Song> songs, int position)
+        {
+            await _musicService.PlayList(songs, position);
+            _playPauseButton.SetImageResource(Resource.Drawable.Pause128);
+        }
         
-        
-        private Intent MusicServiceIntent => new Intent(this, _musicService.GetType());
+        private Intent MusicServiceIntent => new Intent(this, _musicServiceType);
     }
 }

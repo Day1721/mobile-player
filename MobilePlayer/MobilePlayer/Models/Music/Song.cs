@@ -1,8 +1,9 @@
-﻿using Java.IO;
+﻿using System;
+using Java.IO;
 
 namespace MobilePlayer.Models.Music
 {
-    public class Song
+    public class Song : ICloneable<Song>
     {                                                                                                                                         
         public string Title { get; }
         public string Album { get; }
@@ -24,5 +25,7 @@ namespace MobilePlayer.Models.Music
         {
             return $"{Title} - {Album} - {Artist}";
         }
+
+        public Song Clone() => new Song(Title, Album, Artist, Path, AlbumArtist);
     }
 }
