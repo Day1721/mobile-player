@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
-using Android.Media;
 using Android.OS;
 using Android.Widget;
 using MobilePlayer.Models.Music;
@@ -22,6 +21,8 @@ namespace MobilePlayer
         private MusicServiceAbstract _musicService;
 
         private ImageButton _playPauseButton;
+        private TextView _currentSongView;
+        private ImageView _currentSongCoverView;
         
         public MainActivity()
         {
@@ -51,12 +52,15 @@ namespace MobilePlayer
             
             
             listView.ItemClick += ListViewOnItemClick;
-            
+
+            _currentSongView = FindViewById<TextView>(Resource.Id.CurrentSongView);
             _playPauseButton = FindViewById<ImageButton>(Resource.Id.PlayPauseBtn);
+            _currentSongCoverView = FindViewById<ImageView>(Resource.Id.NavbarCover);
             
             _playPauseButton.Click += PlayPauseOnClick;
-            FindViewById<ImageButton>(Resource.Id.Previous).Click += PreviousOnClick;
-            FindViewById<ImageButton>(Resource.Id.Next).Click += NextOnClick;
+            _currentSongView.Click += CurrentSongOnClick;
+            //FindViewById<ImageButton>(Resource.Id.Previous).Click += PreviousOnClick;
+            //FindViewById<ImageButton>(Resource.Id.Next).Click += NextOnClick;
 
             InitMusicService();
         }
@@ -86,7 +90,7 @@ namespace MobilePlayer
         {
             if (_musicService.IsPlaying)
             {
-                Pause();
+                Pause();    
             }
             else
             {
@@ -94,8 +98,8 @@ namespace MobilePlayer
             }
         }
 
-        private async void NextOnClick(object sender, EventArgs e) => await _musicService.Next();
-        private async void PreviousOnClick(object sender, EventArgs e) => await _musicService.Previous();
+        //private async void NextOnClick(object sender, EventArgs e) => await _musicService.Next();
+        //private async void PreviousOnClick(object sender, EventArgs e) => await _musicService.Previous();
 
         private void Pause()
         {
@@ -112,9 +116,33 @@ namespace MobilePlayer
         private async Task PlayList(IList<Song> songs, int position)
         {
             await _musicService.PlayList(songs, position);
+            _currentSongView.Text = songs[position].ToString();
+            if (songs[position].Cover == null)
+            {
+                _currentSongCoverView.SetImageResource(Resource.Drawable.NoCover);
+            }
+            else
+            {
+                _currentSongCoverView.SetImageBitmap(songs[position].Cover);
+            }
+            _currentSongCoverView.SetAdjustViewBounds(true);
+            
             _playPauseButton.SetImageResource(Resource.Drawable.Pause128);
         }
-        
+
+        private void CurrentSongOnClick(object sender, EventArgs e)
+        {
+            if (_musicService.IsSetPlaylist)
+            {
+                ShowSongInfo(_musicService.CurrentSong);
+            }
+        }
+
+        private void ShowSongInfo(Song song)
+        {
+            //TODO
+        }
+
         private Intent MusicServiceIntent => new Intent(this, _musicServiceType);
     }
 }

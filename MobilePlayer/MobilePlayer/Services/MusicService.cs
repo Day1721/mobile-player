@@ -16,8 +16,7 @@ namespace MobilePlayer.Services
         private const int NotificationId = 6325;
         private Notification.Action.Builder _pausePlayActionBuilder;
         private Notification.Builder _notificationBuilder;
-        
-        
+
         private MediaPlayer _player;
         private IBinder _musicBinder;
 

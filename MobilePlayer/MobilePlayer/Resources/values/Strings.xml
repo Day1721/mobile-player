@@ -4,4 +4,5 @@
     <string name="ApplicationName">MobilePlayer</string>
     
     <string name="MusicService.NotificationTitle">Music Player</string>
+    <string name="NoSongPlaysMessage">No songs in playlist</string>
 </resources>

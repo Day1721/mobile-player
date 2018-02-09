@@ -48,19 +48,25 @@ namespace MobilePlayer
 			public const int back = 2130837504;
 			
 			// aapt resource value: 0x7f020001
-			public const int Icon = 2130837505;
+			public const int borderBack = 2130837505;
 			
 			// aapt resource value: 0x7f020002
-			public const int next = 2130837506;
+			public const int Icon = 2130837506;
 			
 			// aapt resource value: 0x7f020003
-			public const int Pause128 = 2130837507;
+			public const int next = 2130837507;
 			
 			// aapt resource value: 0x7f020004
-			public const int Play128 = 2130837508;
+			public const int NoCover = 2130837508;
 			
 			// aapt resource value: 0x7f020005
-			public const int Player = 2130837509;
+			public const int Pause128 = 2130837509;
+			
+			// aapt resource value: 0x7f020006
+			public const int Play128 = 2130837510;
+			
+			// aapt resource value: 0x7f020007
+			public const int Player = 2130837511;
 			
 			static Drawable()
 			{
@@ -75,17 +81,17 @@ namespace MobilePlayer
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f050004
+			public const int CurrentSongView = 2131034116;
+			
 			// aapt resource value: 0x7f050001
 			public const int EmptySongList = 2131034113;
 			
-			// aapt resource value: 0x7f050004
-			public const int Next = 2131034116;
-			
 			// aapt resource value: 0x7f050002
-			public const int PlayPauseBtn = 2131034114;
+			public const int NavbarCover = 2131034114;
 			
 			// aapt resource value: 0x7f050003
-			public const int Previous = 2131034115;
+			public const int PlayPauseBtn = 2131034115;
 			
 			// aapt resource value: 0x7f050000
 			public const int SongList = 2131034112;
@@ -127,6 +133,9 @@ namespace MobilePlayer
 			
 			// aapt resource value: 0x7f040002
 			public const int MusicService_NotificationTitle = 2130968578;
+			
+			// aapt resource value: 0x7f040003
+			public const int NoSongPlaysMessage = 2130968579;
 			
 			static String()
 			{

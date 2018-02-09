@@ -93,6 +93,8 @@
     <AndroidResource Include="Resources\drawable\Player.png" />
     <AndroidResource Include="Resources\drawable\back.png" />
     <AndroidResource Include="Resources\drawable\next.png" />
+    <AndroidResource Include="Resources\drawable\borderBack.axml" />
+    <AndroidResource Include="Resources\drawable\NoCover.jpg" />
     <Content Include="Resources\layout\SongRow.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

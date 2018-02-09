@@ -1,7 +1,8 @@
 language: csharp
 solution: MobilePlayer/MobilePlayer.sln
-install:
-  - nuget restore MobilePlayer/MobilePlayer.sln
+
+script:
+  - brew install automake
 
 matrix:
   include:

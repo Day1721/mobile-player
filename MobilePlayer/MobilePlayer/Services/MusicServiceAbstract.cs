@@ -12,7 +12,10 @@ namespace MobilePlayer.Services
         public abstract IList<Song> Playlist { get; }
         public abstract int Current { get; }
         public Song CurrentSong => IsPlaying ? Playlist[Current] : null;
-        
+        public bool IsSetPlaylist => (Playlist?.Count ?? 0) > 0;
+
+        public Song this[int i] => Playlist[i];
+
         public abstract bool IsPlaying { get; }
 
         public abstract Task PlayList(IList<Song> playlist, int index = 0);
