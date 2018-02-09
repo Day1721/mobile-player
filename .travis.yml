@@ -1,2 +1,2 @@
 language: csharp
-solution: MobilePlayer/MobilePlayer.cs
+solution: MobilePlayer/MobilePlayer.sln
