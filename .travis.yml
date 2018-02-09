@@ -1,2 +1,15 @@
 language: csharp
 solution: MobilePlayer/MobilePlayer.sln
+install:
+  - nuget restore MobilePlayer/MobilePlayer.sln
+
+matrix:
+  include:
+    - language: android
+      jdk: oraclejdk8
+      android:
+        components:
+          - tools
+          - platform-tools
+          - android-23
+          - build-tools-25.2.5
