@@ -51,22 +51,25 @@ namespace MobilePlayer
 			public const int borderBack = 2130837505;
 			
 			// aapt resource value: 0x7f020002
-			public const int Icon = 2130837506;
+			public const int Close = 2130837506;
 			
 			// aapt resource value: 0x7f020003
-			public const int next = 2130837507;
+			public const int Icon = 2130837507;
 			
 			// aapt resource value: 0x7f020004
-			public const int NoCover = 2130837508;
+			public const int next = 2130837508;
 			
 			// aapt resource value: 0x7f020005
-			public const int Pause128 = 2130837509;
+			public const int NoCover = 2130837509;
 			
 			// aapt resource value: 0x7f020006
-			public const int Play128 = 2130837510;
+			public const int Pause128 = 2130837510;
 			
 			// aapt resource value: 0x7f020007
-			public const int Player = 2130837511;
+			public const int Play128 = 2130837511;
+			
+			// aapt resource value: 0x7f020008
+			public const int Player = 2130837512;
 			
 			static Drawable()
 			{
@@ -81,20 +84,35 @@ namespace MobilePlayer
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f050004
-			public const int CurrentSongView = 2131034116;
-			
-			// aapt resource value: 0x7f050001
-			public const int EmptySongList = 2131034113;
-			
-			// aapt resource value: 0x7f050002
-			public const int NavbarCover = 2131034114;
-			
 			// aapt resource value: 0x7f050003
-			public const int PlayPauseBtn = 2131034115;
+			public const int CurrentArtist = 2131034115;
 			
 			// aapt resource value: 0x7f050000
-			public const int SongList = 2131034112;
+			public const int CurrentClose = 2131034112;
+			
+			// aapt resource value: 0x7f050001
+			public const int CurrentCover = 2131034113;
+			
+			// aapt resource value: 0x7f050004
+			public const int CurrentPreviousButton = 2131034116;
+			
+			// aapt resource value: 0x7f050009
+			public const int CurrentSongView = 2131034121;
+			
+			// aapt resource value: 0x7f050002
+			public const int CurrentTitle = 2131034114;
+			
+			// aapt resource value: 0x7f050006
+			public const int EmptySongList = 2131034118;
+			
+			// aapt resource value: 0x7f050007
+			public const int NavbarCover = 2131034119;
+			
+			// aapt resource value: 0x7f050008
+			public const int PlayPauseBtn = 2131034120;
+			
+			// aapt resource value: 0x7f050005
+			public const int SongList = 2131034117;
 			
 			static Id()
 			{
@@ -110,7 +128,10 @@ namespace MobilePlayer
 		{
 			
 			// aapt resource value: 0x7f030000
-			public const int Main = 2130903040;
+			public const int CurrentSong = 2130903040;
+			
+			// aapt resource value: 0x7f030001
+			public const int Main = 2130903041;
 			
 			static Layout()
 			{

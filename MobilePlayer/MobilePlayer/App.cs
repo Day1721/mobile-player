@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Android.App;
 using Android.Runtime;
 using MobilePlayer.Models;
@@ -18,6 +19,9 @@ namespace MobilePlayer
         public App(IntPtr handle, JniHandleOwnership transfer)
             : base(handle, transfer)
         { }
+
+        private static readonly string LocalStoragePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+        public static string MakePathTo(string filename) => Path.Combine(LocalStoragePath, filename);
         
         internal static TinyIoCContainer Container { get; private set; }
         

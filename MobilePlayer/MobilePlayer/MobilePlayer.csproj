@@ -47,12 +47,16 @@
   <ItemGroup>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1-beta3\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activities\CurrentSongActivity.cs" />
     <Compile Include="App.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Models\Extentions\LinqExtentions.cs" />
@@ -62,6 +66,7 @@
     <Compile Include="Models\Music\IMusicScanner.cs" />
     <Compile Include="Models\Music\MusicParser.cs" />
     <Compile Include="Models\Music\MusicScanner.cs" />
+    <Compile Include="Models\Music\Playlist.cs" />
     <Compile Include="Models\Music\Song.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -85,9 +90,6 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Activities" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\Pause128.png" />
     <AndroidResource Include="Resources\drawable\Play128.png" />
     <AndroidResource Include="Resources\drawable\Player.png" />
@@ -95,6 +97,8 @@
     <AndroidResource Include="Resources\drawable\next.png" />
     <AndroidResource Include="Resources\drawable\borderBack.axml" />
     <AndroidResource Include="Resources\drawable\NoCover.jpg" />
+    <AndroidResource Include="Resources\layout\CurrentSong.axml" />
+    <AndroidResource Include="Resources\drawable\Close.png" />
     <Content Include="Resources\layout\SongRow.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

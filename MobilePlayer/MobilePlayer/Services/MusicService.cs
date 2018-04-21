@@ -20,6 +20,8 @@ namespace MobilePlayer.Services
         private MediaPlayer _player;
         private IBinder _musicBinder;
 
+        private bool _initialized = false;
+
         private IList<Song> _playlist;
         public override IList<Song> Playlist => _playlist;
         private void SetPlaylist(ICollection<Song> playlist)
@@ -54,6 +56,16 @@ namespace MobilePlayer.Services
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId) => StartCommandResult.Sticky;
 
         public override IBinder OnBind(Intent intent) => _musicBinder;
+
+        public override void Init() => _initialized = true;
+
+        public override void Init(IList<Song> playlist, int index)
+        {
+            SetPlaylist(playlist);
+            SetCurrent(index);
+            _player.SetDataSource(_playlist[index].Path.AbsolutePath);
+            _player.PrepareAsync();
+        }
 
         public override async Task PlayList(IList<Song> playlist, int index = 0)
         {
@@ -96,7 +108,14 @@ namespace MobilePlayer.Services
             var notification = _notificationBuilder.Build();
                         
             StartForeground(NotificationId, notification);
-            mp.Start();
+            if (_initialized)
+            {
+                mp.Start();
+            }
+            else
+            {
+                _initialized = true;
+            }
         }
 
 
